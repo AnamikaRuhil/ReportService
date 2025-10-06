@@ -13,7 +13,5 @@ import lombok.*;
 public class DepartmentEntity extends BaseEntity{
     @Column(unique = true,nullable = false)
     private String name;
-    @ManyToOne
-    private UserEntity departmentHead;
 
 }

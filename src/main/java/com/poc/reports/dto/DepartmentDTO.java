@@ -8,6 +8,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class DepartmentDTO {
     String name;
-    UserEntity departmentHead;
+    //UserEntity departmentHead;
 
 }

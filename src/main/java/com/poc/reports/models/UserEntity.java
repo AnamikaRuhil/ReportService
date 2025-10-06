@@ -19,6 +19,8 @@ public class UserEntity {
     private String username;
     private String email;
     private String password;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
     private RoleEntity roleEntity;
 }

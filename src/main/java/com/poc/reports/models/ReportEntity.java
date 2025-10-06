@@ -22,6 +22,8 @@ public class ReportEntity {
     private String issueDescription;
     private String updatedBy;
     private Date updatedAt;
+    private Date createdAt;
+    private String createdBy;
 
 
 }

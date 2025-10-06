@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface DepartmentRepository extends JpaRepository<DepartmentEntity, Long> {
     Collection<Object> findByNameIn(List<String> departmentNames);
+
+    DepartmentEntity findByName(String name);
 }
