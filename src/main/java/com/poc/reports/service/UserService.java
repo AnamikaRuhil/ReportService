@@ -5,7 +5,7 @@ import com.poc.reports.dao.RoleRepository;
 import com.poc.reports.dao.UserRepository;
 import com.poc.reports.dto.UserDTO;
 import com.poc.reports.dto.UserResponseDTO;
-import com.poc.reports.logging.DataNotFoundException;
+import com.poc.reports.exception.DataNotFoundException;
 import com.poc.reports.models.DepartmentEntity;
 import com.poc.reports.models.RoleEntity;
 import com.poc.reports.models.UserEntity;

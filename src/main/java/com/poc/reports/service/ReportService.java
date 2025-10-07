@@ -6,7 +6,7 @@ import com.poc.reports.dao.ReportRepository;
 import com.poc.reports.dao.UserRepository;
 import com.poc.reports.dto.ReportDTO;
 import com.poc.reports.dto.ReportFilterDto;
-import com.poc.reports.logging.DataNotFoundException;
+import com.poc.reports.exception.DataNotFoundException;
 import com.poc.reports.models.DepartmentEntity;
 import com.poc.reports.models.ReportEntity;
 import com.poc.reports.models.ReportHistoryEntity;
@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.FileOutputStream;
 

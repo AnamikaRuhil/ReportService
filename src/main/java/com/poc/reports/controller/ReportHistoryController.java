@@ -1,6 +1,6 @@
 package com.poc.reports.controller;
 
-import com.poc.reports.logging.DataNotFoundException;
+import com.poc.reports.exception.DataNotFoundException;
 import com.poc.reports.models.ReportHistoryEntity;
 import com.poc.reports.service.ReportHistoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;

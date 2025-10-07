@@ -91,7 +91,7 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping
+    /*@GetMapping
     public ResponseEntity<List<ReportEntity>> newFilter(@RequestBody ReportFilterDto rf){
         logger.debug("Start of REQUEST: GET /reports/filter Body: {}", rf.toString() );;
 
@@ -100,7 +100,7 @@ public class ReportController {
 
         return ResponseEntity.ok(response);
 
-    }
+    }*/
 
     @GetMapping("/get")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")

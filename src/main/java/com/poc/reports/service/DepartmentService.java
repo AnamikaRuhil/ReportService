@@ -1,7 +1,7 @@
 package com.poc.reports.service;
 
 import com.poc.reports.dao.DepartmentRepository;
-import com.poc.reports.logging.DataNotFoundException;
+import com.poc.reports.exception.DataNotFoundException;
 import com.poc.reports.models.DepartmentEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

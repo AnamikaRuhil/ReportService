@@ -1,4 +1,4 @@
-package com.poc.reports.logging;
+package com.poc.reports.exception;
 
 public class DataNotFoundException extends RuntimeException{
 
