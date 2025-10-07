@@ -16,4 +16,10 @@ public interface ReportRepository extends MongoRepository<ReportEntity, String> 
     Optional<ReportEntity> findById(String id);
 
     List<ReportEntity> findByCreatedAtBetween(Date fromDate, Date toDate);
+
+    List<ReportEntity> findByDepartmentNameIgnoreCase(String name);
+
+    List<ReportEntity> findByCreatedBy(String name);
+
+    List<ReportEntity> findByIssueDescriptionRegex(String pattern);
 }

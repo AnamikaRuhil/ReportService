@@ -1,0 +1,11 @@
+2025-10-07 10:15:04 DEBUG [http-nio-8081-exec-10] c.p.r.controller.AuthController - Generating token for user , name :: testuser 
+2025-10-07 10:15:07 DEBUG [http-nio-8081-exec-3] c.p.r.controller.AuthController - Generating token for user , name :: testuser 
+2025-10-07 10:15:24 DEBUG [http-nio-8081-exec-1] c.p.r.controller.ReportController - Start of REQUEST: GET /reportshistory Request Param: 68e42ae08ad56cb452e18c99
+2025-10-07 10:15:24 DEBUG [http-nio-8081-exec-1] c.p.r.controller.ReportController - END of /reportshistory :: Response Code 500 :: Response: No Report History present for id :68e42ae08ad56cb452e18c99
+2025-10-07 10:15:24 WARN  [http-nio-8081-exec-1] o.s.w.b.annotation.ExceptionHandler - Bad Request at : [GET /reportshistory]: Data not found: No Report History present for id :68e42ae08ad56cb452e18c99
+2025-10-07 10:15:24 ERROR [http-nio-8081-exec-1] o.s.w.b.annotation.ExceptionHandler - Data not found: No Report History present for id :68e42ae08ad56cb452e18c99
+2025-10-07 10:15:24 WARN  [http-nio-8081-exec-1] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.poc.reports.logging.DataNotFoundException: Data not found: No Report History present for id :68e42ae08ad56cb452e18c99]
+2025-10-07 10:15:44 DEBUG [http-nio-8081-exec-4] c.p.r.controller.ReportController - Start of REQUEST: GET /reportshistory Request Param: 68e4209fddace058e6ea2b96
+2025-10-07 10:15:45 DEBUG [http-nio-8081-exec-4] c.p.r.controller.ReportController - END of /reportshistory :: Response Code 200 :: Response: [com.poc.reports.models.ReportHistoryEntity@22ac5270]
+2025-10-07 10:16:54 DEBUG [http-nio-8081-exec-8] c.p.r.c.DepartmentController - Start of REQUEST: GET /department
+2025-10-07 10:16:54 DEBUG [http-nio-8081-exec-8] c.p.r.c.DepartmentController - END of /department :: Response Code 200 :: Response: [com.poc.reports.models.DepartmentEntity@377c6400, com.poc.reports.models.DepartmentEntity@34202c6d, com.poc.reports.models.DepartmentEntity@460a32d, com.poc.reports.models.DepartmentEntity@710729b8, com.poc.reports.models.DepartmentEntity@250f1ffc]

@@ -1,9 +1,7 @@
 package com.poc.reports.models;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -12,15 +10,17 @@ import lombok.Setter;
 @Setter
 @Table(name = "users")
 
-public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class UserEntity extends BaseEntity {
+    @Column(unique = true,nullable = false)
     private String username;
     private String email;
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "role_id")
     private RoleEntity roleEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private DepartmentEntity department;
 }

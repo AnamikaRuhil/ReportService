@@ -1,12 +1,8 @@
 package com.poc.reports;
 
-import com.poc.reports.controller.UserController;
 import com.poc.reports.dao.DepartmentRepository;
 import com.poc.reports.dao.RoleRepository;
-import com.poc.reports.dto.DepartmentDTO;
 import com.poc.reports.dto.UserDTO;
-import com.poc.reports.models.DepartmentEntity;
-import com.poc.reports.models.RoleEntity;
 import com.poc.reports.service.DepartmentService;
 import com.poc.reports.service.RoleService;
 import com.poc.reports.service.UserService;
@@ -40,33 +36,59 @@ public class DataInitializer implements CommandLineRunner {
         this.roleRepository = roleRepository;
     }
 
-
     @Override
-    public void run(String... args) throws Exception {
-        logger.info("create default admin user :starts");
+    public void run(String... args) {
+        initializeRoles();
+        initializeDepartments();
+        initializeUsers();
+    }
 
+    private void initializeUsers() {
+        UserDTO adminUserDTO = UserDTO.builder()
+                .userName("testadmin")
+                .email("admin@reportservice.com")
+                .password("root")
+                .roleId(roleRepository.findByRole("ADMIN").getId())
+                .departmentId(departmentRepository.findByNameIgnoreCase("HR").getId())
+                .build();
+        userService.createUser(adminUserDTO);
+
+        UserDTO userUserDTO = UserDTO.builder()
+                .userName("testuser")
+                .email("user@reportservice.com")
+                .password("root")
+                .roleId(roleRepository.findByRole("USER").getId())
+                .departmentId(departmentRepository.findByNameIgnoreCase("IT").getId())
+                .build();
+        userService.createUser(userUserDTO);
+
+        UserDTO managerUserDTO = UserDTO.builder()
+                .userName("testmanager")
+                .email("manager@reportservice.com")
+                .password("root")
+                .roleId(roleRepository.findByRole("MANAGER").getId())
+                .departmentId(departmentRepository.findByNameIgnoreCase("Finance").getId())
+                .build();
+        userService.createUser(managerUserDTO);
+        logger.info("default users created successfully!!!!");
+
+    }
+
+    private void initializeDepartments() {
+        String[] departments = {"IT", "HR", "Finance", "Operations", "Customer Support"};
+        for (String deptName : departments) {
+            if (departmentRepository.findByNameIgnoreCase(deptName) == null) {
+                departmentService.createDepartment(deptName);
+            }
+        }
+    }
+
+    private void initializeRoles() {
         String [] roles = {"ADMIN", "MANAGER","USER"};
         for(String role : roles){
             if (roleRepository.findByRole(role) == null) {
                 roleService.createRole(role);
             }
         }
-
-        String[] departments = {"IT", "HR", "Finance", "Operations", "Customer Support"};
-        for (String deptName : departments) {
-            if (departmentRepository.findByName(deptName) == null) {
-                departmentService.createDepartment(deptName);
-            }
-        }
-
-        UserDTO userDTO = UserDTO.builder()
-                .userName("admin")
-                .email("admin@reportservice.com")
-                .password("root")
-                .roleId(roleRepository.findByRole("ADMIN").getId())
-                .build();
-        userService.createUser(userDTO);
-        logger.info("default admin user created successfully!!!!");
-
     }
 }

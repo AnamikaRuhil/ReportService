@@ -38,7 +38,7 @@ public class AuthController {
         );
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getUserName());
-        logger.info("Generating token for user , name :: {} ", dto.getUserName());
+        logger.debug("Generating token for user , name :: {} ", dto.getUserName());
         return jwtUtil.generateToken(userDetails);
     }
 }

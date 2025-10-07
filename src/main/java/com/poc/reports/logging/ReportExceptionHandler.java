@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 
 @ControllerAdvice
@@ -24,7 +25,6 @@ public class ReportExceptionHandler {
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("timestamp", LocalDateTime.now());
         responseMap.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        responseMap.put("error", "Internal Server Error");
         responseMap.put("message", ex.getMessage());
         responseMap.put("path", request.getRequestURI());
         return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -38,7 +38,6 @@ public class ReportExceptionHandler {
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("timestamp", LocalDateTime.now());
         responseMap.put("status", HttpStatus.BAD_REQUEST.value());
-        responseMap.put("error", "Internal Server Error");
         responseMap.put("message", ex.getMessage());
         responseMap.put("path", request.getRequestURI());
         return new ResponseEntity<>(responseMap, HttpStatus.BAD_REQUEST);
@@ -51,11 +50,23 @@ public class ReportExceptionHandler {
 
         HashMap<String, Object> responseMap = new HashMap<>();
         responseMap.put("timestamp", LocalDateTime.now());
+        responseMap.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        responseMap.put("message", ex.getMessage());
+        responseMap.put("path", request.getRequestURI());
+        logger.error(ex.getMessage(),ex.getStackTrace().toString());
+        return new ResponseEntity<>(responseMap, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Object> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request){
+        logger.warn("Not found  : [{} {}]: {}",request.getMethod(),request.getRequestURI(),ex.getMessage());
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        responseMap.put("timestamp", LocalDateTime.now());
         responseMap.put("status", HttpStatus.NOT_FOUND.value());
-        responseMap.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());
         responseMap.put("message", ex.getMessage());
         responseMap.put("path", request.getRequestURI());
         return new ResponseEntity<>(responseMap, HttpStatus.NOT_FOUND);
-    }
 
+    }
 }

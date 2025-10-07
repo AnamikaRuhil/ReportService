@@ -1,21 +1,19 @@
 package com.poc.reports.controller;
 
-import com.poc.reports.dto.UserDTO;
 import com.poc.reports.models.DepartmentEntity;
-import com.poc.reports.models.UserEntity;
 import com.poc.reports.service.DepartmentService;
-import com.poc.reports.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/departments")
+@Tag(name = "Department", description = " Department APIs")
 public class DepartmentController {
 
     private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
@@ -34,9 +32,21 @@ public class DepartmentController {
      */
     @PostMapping("/create")
     public ResponseEntity<DepartmentEntity> createDepartment(@RequestBody String name) {
-        logger.info("Starting createDepartment():: REQUEST: POST /departments/create  for deptName: {}", name);
+        logger.debug("Start of REQUEST: POST /departments/create  for deptName: {}", name);
         DepartmentEntity response = departmentService.createDepartment(name);
-        logger.info("createDepartment():: Ends. Department created successfully");
+        logger.debug("END of /departments/create:: StatusCode 200. Department created successfully {}", response.toString());
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     *
+     * @return list of  department
+     */
+    @GetMapping
+    public ResponseEntity<List<DepartmentEntity>> getDepartments() {
+        logger.debug("Start of REQUEST: GET /department");
+        List<DepartmentEntity> response = departmentService.findAll();
+        logger.debug("END of /department :: Response Code 200 :: Response: {}", response.toString());
+        return ResponseEntity.ok(departmentService.findAll());
     }
 }

@@ -1,25 +1,25 @@
 package com.poc.reports.controller;
 
 import com.poc.reports.dto.ReportDTO;
+import com.poc.reports.dto.ReportFilterDto;
 import com.poc.reports.models.ReportEntity;
 import com.poc.reports.service.ReportService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/reports")
-@Tag(name = "Reports", description = "Reports management APIs")
+@Tag(name = "Reports", description = "Report management APIs")
 public class ReportController {
     private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
     private final ReportService reportService;
@@ -32,13 +32,15 @@ public class ReportController {
      * Creates a new report.
      *
      * @param report The report object to be created
-     * @return The created report with generated details (e.g., ReportId, Department, IssueDescription)
+     * @return The created report with generated details (ReportId, Department, IssueDescription)
      */
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('USER','MANAGER')")
     public ResponseEntity<ReportEntity> createReport(@RequestBody ReportDTO report) {
-        logger.info("Starting createReport():: REQUEST: POST /reports/create  with body: {}", report);
+        logger.debug("Start of REQUEST: POST /reports/create BODY: {}", report.toString() );
         ReportEntity response = reportService.createReport(report);
-        logger.info("createReport():: Ends. Report created successfully");
+        logger.debug("END of /reports/create :: Response Code 200 :: Response: {}", response.toString());
+
         return ResponseEntity.ok(response);
     }
 
@@ -50,13 +52,13 @@ public class ReportController {
      * @return Updated report
      */
     @PostMapping("/{reportId}/update")
+    @PreAuthorize("hasAnyRole('USER','MANAGER')")
     public ResponseEntity<?> updateReport(@RequestBody ReportDTO report, @PathVariable String reportId) {
-        logger.info("Starting updateReport():: REQUEST: POST /reports/{reportId}/update for id {}", reportId);
+        logger.debug("Start of REQUEST: POST /reports/{}/update BODY: {}",reportId, report.toString() );
         ReportEntity response = reportService.updateReport(reportId, report);
-        logger.info("updateReport():: Ends. Report updated successfully");
+        logger.debug("END of /reports/{}/update :: Response Code 200 :: Response: {}", reportId, response.toString());
+
         return ResponseEntity.ok(response);
-
-
     }
 
     /**
@@ -67,7 +69,7 @@ public class ReportController {
      */
     @PostMapping("/export")
     public ResponseEntity<byte[]> exportReportsToExcel(@RequestBody List<String> deptNames) throws IOException {
-        logger.info("Starting exportReportsToExcel():: REQUEST: POST /reports/export for department {}", deptNames);
+        logger.debug("Start of REQUEST: POST /reports/export BODY: {}",deptNames.toString() );;
         byte[] excelFile = reportService.exportReportsToExcel(deptNames);
         logger.info("exportReportsToExcel():: Ends. Report exported successfully");
         HttpHeaders headers = new HttpHeaders();
@@ -79,11 +81,35 @@ public class ReportController {
                 .body(excelFile);
     }
 
+    @GetMapping("/filter")
+    public ResponseEntity<List<ReportEntity>> filterReports(@RequestBody ReportFilterDto filterDto){
+        logger.debug("Start of REQUEST: GET /reports Parameters: {}, {}, {}", filterDto.getReportId(),
+                filterDto.getCreatedFrom(), filterDto.getCreatedTo() );;
+        List<ReportEntity> response = reportService.getReports(filterDto.getReportId(),filterDto.getCreatedFrom(),filterDto.getCreatedTo());
+        logger.debug("END of /reports :: Response Code 200 :: Response: {}", response.toString());
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping
-    public List<ReportEntity> findReports(@RequestParam (required =false) String id,
-                                          @RequestParam (required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date fromDate,
-                                          @RequestParam (required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date toDate){
-        return reportService.getReports(id,fromDate,toDate);
+    public ResponseEntity<List<ReportEntity>> newFilter(@RequestBody ReportFilterDto rf){
+        logger.debug("Start of REQUEST: GET /reports/filter Body: {}", rf.toString() );;
+
+        List<ReportEntity> response =  reportService.newFilter(rf);
+        logger.debug("END of /reports/filter :: Response Code 200 :: Response: {}", response.toString());
+
+        return ResponseEntity.ok(response);
+
+    }
+
+    @GetMapping("/get")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    public ResponseEntity<List<ReportEntity>> getReportsBasedOnROle(@RequestParam String name) {
+        logger.debug("Start of REQUEST: GET /reports/get Request Param: {}",name );;
+        List<ReportEntity> response = reportService.getReportsBasedOnRole(name);
+        logger.debug("END of /reports/get :: Response Code 200 :: Response: {}", response.toString());
+
+        return ResponseEntity.ok(response);
     }
 
 }

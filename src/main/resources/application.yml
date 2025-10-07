@@ -1,0 +1,17 @@
+logging:
+  logback:
+    rollingpolicy:
+      file-name-pattern: logs/app-%d{yyyy-MM-dd}.%i.log
+      max-file-size: 5KB
+      max-history: 10
+      total-size-cap: 1GB
+
+  file:
+    name: logs/app.log
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    com.poc.reports: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - %msg%n"
