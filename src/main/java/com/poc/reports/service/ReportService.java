@@ -160,24 +160,27 @@ public class ReportService {
      * and  generates an Excel workbook containing the report data, and returns it as a byte array.</p>
      *
      * @param deptNames List of department names for which reports need to be exported
-     * @return byte array representing the generated Excel file (.xlsx)
+     * @return export status representing report export is success/fail
      * @throws IOException If an error occurs while creating or writing the Excel file
      */
-    public byte[] exportReportsToExcel(List<String> deptNames) throws IOException {
+    public String exportReportsToExcel(List<String> deptNames) throws IOException {
         List<ReportEntity> reports = repository.findByDepartmentNameIgnoreCaseIn(deptNames);
 
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet("Reports");
 
-            // Header Style
             CellStyle headerStyle = workbook.createCellStyle();
-            headerStyle.setFillBackgroundColor(IndexedColors.LIGHT_BLUE.getIndex());
-            headerStyle.setBorderBottom(BorderStyle.THIN);
-            headerStyle.setBorderTop(BorderStyle.THIN);
-            headerStyle.setBorderRight(BorderStyle.THIN);
-            headerStyle.setBorderLeft(BorderStyle.THIN);
+            headerStyle.setFillForegroundColor(IndexedColors.LIGHT_YELLOW.getIndex());
+            headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            headerStyle.setBorderBottom(BorderStyle.THICK);
+            headerStyle.setBorderTop(BorderStyle.THICK);
+            headerStyle.setBorderRight(BorderStyle.THICK);
+            headerStyle.setBorderLeft(BorderStyle.THICK);
 
-            // Header Row
+            Font headerFont = workbook.createFont();
+            headerFont.setBold(true);
+            headerStyle.setFont(headerFont);
+
             Row headerRow = sheet.createRow(0);
             String[] headers = {"ID", "Department Name", "Issue Description"};
             for (int i = 0; i < headers.length; i++) {
@@ -186,7 +189,6 @@ public class ReportService {
                 cell.setCellStyle(headerStyle);
             }
 
-            // Data Rows
             int rowIdx = 1;
             for (ReportEntity report : reports) {
                 Row row = sheet.createRow(rowIdx++);
@@ -201,13 +203,15 @@ public class ReportService {
 
             try (FileOutputStream fileOut = new FileOutputStream("Reports.xlsx")) {
                 workbook.write(fileOut);
+                //workbook.write(out);
+                if (sheet.getPhysicalNumberOfRows() > 1){
+                    return("Report export success!!!!!");
+                }
             } catch (IOException e) {
                 logger.error("error while report export to excel");
-                throw new ServerException(e.getMessage());
-            } finally {
-                workbook.close();
+                throw new RuntimeException("Failed to export Excel report",e);
             }
-            return out.toByteArray();
+            return "Export success, but file is empty";
         }
     }
 

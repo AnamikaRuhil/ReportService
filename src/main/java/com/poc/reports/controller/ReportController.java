@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,17 +69,10 @@ public class ReportController {
      * @return Reports.xlsx
      */
     @PostMapping("/export")
-    public ResponseEntity<byte[]> exportReportsToExcel(@RequestBody List<String> deptNames) throws IOException {
+    public ResponseEntity<String> exportReportsToExcel(@RequestBody List<String> deptNames) throws IOException {
         logger.debug("Start of REQUEST: POST /reports/export BODY: {}",deptNames.toString() );;
-        byte[] excelFile = reportService.exportReportsToExcel(deptNames);
-        logger.info("exportReportsToExcel():: Ends. Report exported successfully");
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=reports.xlsx");
-        headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-
-        return ResponseEntity.ok()
-                .header(String.valueOf(headers))
-                .body(excelFile);
+        String response = reportService.exportReportsToExcel(deptNames);
+       return ResponseEntity.ok(response);
     }
 
     @GetMapping("/filter")

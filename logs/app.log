@@ -1,1 +1,1 @@
-2025-10-07 11:28:17 DEBUG [http-nio-8081-exec-8] c.p.r.controller.AuthController - Generating token for user , name :: testuser 
+2025-10-07 15:40:06 WARN  [http-nio-8081-exec-1] o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.RuntimeException: Failed to export Excel report]
